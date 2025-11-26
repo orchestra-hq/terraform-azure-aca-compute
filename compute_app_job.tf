@@ -3,7 +3,7 @@ data "azurerm_resource_group" "this" {
 }
 
 data "azurerm_container_app_environment" "this" {
-  count = var.container_app_environment_name != null ? 1 : 0
+  count = local.create_container_app_environment ? 0 : 1
 
   name                = var.container_app_environment_name
   resource_group_name = var.resource_group_name
@@ -29,11 +29,16 @@ resource "azurerm_container_app_environment" "this" {
 }
 
 resource "azurerm_container_app_job" "this" {
-  name                         = local.name
+  name                         = substr(local.name, 0, 32)
   resource_group_name          = data.azurerm_resource_group.this.name
   location                     = data.azurerm_resource_group.this.location
   container_app_environment_id = local.container_app_environment_id
-  replica_timeout_in_seconds   = 1800 # TODO - Set this to whatever limit we should have in orchestra
+  replica_timeout_in_seconds   = 1800 # TODO - Set this
+
+  manual_trigger_config {
+    parallelism              = 1 # TODO - Set this
+    replica_completion_count = 1 # TODO - Set this
+  }
 
   registry {
     server               = var.docker_image_access.server
@@ -49,7 +54,7 @@ resource "azurerm_container_app_job" "this" {
   template {
     container {
       image  = "${var.image.name}:${var.image.tag}"
-      name   = "main-container"
+      name   = "compute-runner"
       cpu    = var.image.cpu
       memory = var.image.memory
     }

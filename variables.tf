@@ -51,9 +51,30 @@ variable "tags" { # TODO - Set this up
 variable "docker_image_access" {
   description = "Docker image access credentials, which can be found in the Orchestra UI during Compute Resource set-up."
   type = object({
-    server   = string
-    username = string
-    password = string
+    server               = string
+    username             = string
+    password_secret_name = string
   })
   sensitive = true
+  default = {
+    server               = "docker.io"
+    username             = "placeholder_username"
+    password_secret_name = "registry-password"
+  }
+}
+
+variable "image" {
+  description = "The image to be used for the container app job."
+  type = object({
+    name   = string
+    tag    = string
+    cpu    = string
+    memory = string
+  })
+  default = {
+    name   = "nginx"
+    tag    = "latest"
+    cpu    = "0.5"
+    memory = "1Gi"
+  }
 }
