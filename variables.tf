@@ -48,32 +48,41 @@ variable "tags" { # TODO - Set this up
   default = {}
 }
 
-variable "docker_image_access" {
-  description = "Docker image access credentials, which can be found in the Orchestra UI during Compute Resource set-up."
-  type = object({
-    server               = string
-    username             = string
-    password_secret_name = string
-  })
-  sensitive = true
-  default = {
-    server               = "docker.io"
-    username             = "placeholder_username"
-    password_secret_name = "registry-password"
-  }
+variable "docker_registry_server" {
+  description = "The server URL of Orchestra's region-specific docker registry. This can be found in the Orchestra Compute Resource UI."
+  type        = string
+}
+
+variable "docker_registry_username" {
+  description = "Docker registry username. This can be found in the Orchestra Compute Resource UI."
+  type        = string
+}
+
+variable "docker_registry_password" {
+  description = "Docker registry password. This can be found in the Orchestra Compute Resource UI."
+  type        = string
+  sensitive   = true
 }
 
 variable "image" {
-  description = "The image to be used for the container app job."
+  description = "The container image to be used for the container app job (without registry prefix)."
   type = object({
-    name   = string
-    tag    = string
+    name = string
+    tag  = string
+  })
+  default = {
+    name = "hello-world"
+    tag  = "test1"
+  }
+}
+
+variable "container_resources" {
+  description = "CPU and memory resources for the container."
+  type = object({
     cpu    = string
     memory = string
   })
   default = {
-    name   = "nginx"
-    tag    = "latest"
     cpu    = "0.5"
     memory = "1Gi"
   }

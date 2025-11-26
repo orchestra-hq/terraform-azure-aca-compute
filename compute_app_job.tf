@@ -41,22 +41,22 @@ resource "azurerm_container_app_job" "this" {
   }
 
   registry {
-    server               = var.docker_image_access.server
-    username             = var.docker_image_access.username
-    password_secret_name = var.docker_image_access.password_secret_name
+    server               = var.docker_registry_server
+    username             = var.docker_registry_username
+    password_secret_name = "registry-password"
   }
 
   secret {
     name  = "registry-password"
-    value = "placeholder_password"
+    value = var.docker_registry_password
   }
 
   template {
     container {
-      image  = "${var.image.name}:${var.image.tag}"
+      image  = "${var.docker_registry_server}/${var.image.name}:${var.image.tag}"
       name   = "compute-runner"
-      cpu    = var.image.cpu
-      memory = var.image.memory
+      cpu    = var.container_resources.cpu
+      memory = var.container_resources.memory
     }
   }
 }
