@@ -34,6 +34,7 @@ resource "azurerm_container_app_job" "this" {
   location                     = data.azurerm_resource_group.this.location
   container_app_environment_id = local.container_app_environment_id
   replica_timeout_in_seconds   = 1800 # TODO - Set this
+  workload_profile_name        = "Consumption"
 
   manual_trigger_config {
     parallelism              = 1 # TODO - Set this
