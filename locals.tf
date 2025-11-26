@@ -1,6 +1,8 @@
 locals {
-  name                         = "orchestra-${var.name_prefix}-${random_id.random_suffix.hex}"
-  federated_credentials_issuer = "https://cognito-identity.amazonaws.com"
+  name                             = "orchestra-${var.name_prefix}-${random_id.random_suffix.hex}"
+  federated_credentials_issuer     = "https://cognito-identity.amazonaws.com"
+  create_container_app_environment = var.container_app_environment_name == null
+  container_app_environment_id     = coalesce(var.container_app_environment_name, azurerm_container_app_environment.this[0].id)
 }
 
 resource "random_id" "random_suffix" {
