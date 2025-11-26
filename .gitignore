@@ -3,3 +3,6 @@
 *.tfstate
 *.tfstate.*
 .terraform.lock.hcl
+
+# Orchestra internal testing folder
+internal_testing/
