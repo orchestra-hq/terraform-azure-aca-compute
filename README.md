@@ -19,8 +19,9 @@ When making contributions, ensure that pre-commit is installed and enabled, (e.g
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azuread"></a> [azuread](#provider\_azuread) | ~> 3.0 |
-| <a name="provider_random"></a> [random](#provider\_random) | n/a |
+| <a name="provider_azuread"></a> [azuread](#provider\_azuread) | 3.7.0 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 4.54.0 |
+| <a name="provider_random"></a> [random](#provider\_random) | 3.7.2 |
 
 ## Modules
 
@@ -33,15 +34,28 @@ No modules.
 | [azuread_application.this](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application) | resource |
 | [azuread_application_federated_identity_credential.this](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application_federated_identity_credential) | resource |
 | [azuread_service_principal.this](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/service_principal) | resource |
+| [azurerm_container_app_environment.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/container_app_environment) | resource |
+| [azurerm_container_app_job.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/container_app_job) | resource |
+| [azurerm_log_analytics_workspace.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/log_analytics_workspace) | resource |
+| [azurerm_role_assignment.container_app_job](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
 | [random_id.random_suffix](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
+| [azurerm_container_app_environment.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/container_app_environment) | data source |
+| [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/resource_group) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_container_app_environment_name"></a> [container\_app\_environment\_name](#input\_container\_app\_environment\_name) | If set, this container app environment will be used to deploy the container app job. If not set, a new container app environment will be created. e.g. "test-environment" | `string` | `null` | no |
+| <a name="input_container_resources"></a> [container\_resources](#input\_container\_resources) | CPU and memory resources for the container. | <pre>object({<br/>    cpu    = string<br/>    memory = string<br/>  })</pre> | <pre>{<br/>  "cpu": "0.5",<br/>  "memory": "1Gi"<br/>}</pre> | no |
+| <a name="input_docker_registry_password"></a> [docker\_registry\_password](#input\_docker\_registry\_password) | Docker registry password. This can be found in the Orchestra Compute Resource UI. | `string` | n/a | yes |
+| <a name="input_docker_registry_server"></a> [docker\_registry\_server](#input\_docker\_registry\_server) | The server URL of Orchestra's region-specific docker registry. This can be found in the Orchestra Compute Resource UI. | `string` | n/a | yes |
+| <a name="input_docker_registry_username"></a> [docker\_registry\_username](#input\_docker\_registry\_username) | Docker registry username. This can be found in the Orchestra Compute Resource UI. | `string` | n/a | yes |
 | <a name="input_federated_credentials"></a> [federated\_credentials](#input\_federated\_credentials) | Set the subject and audience values for the federated credentials, which can be found in the Orchestra UI during Compute Resource set-up. | <pre>object({<br/>    subject  = string<br/>    audience = string<br/>  })</pre> | n/a | yes |
+| <a name="input_image"></a> [image](#input\_image) | The container image to be used for the container app job (without registry prefix). | <pre>object({<br/>    name = string<br/>    tag  = string<br/>  })</pre> | <pre>{<br/>  "name": "hello-world",<br/>  "tag": "test1"<br/>}</pre> | no |
 | <a name="input_name_prefix"></a> [name\_prefix](#input\_name\_prefix) | The name prefix to use for the resources created by this module. | `string` | n/a | yes |
 | <a name="input_orchestra_account_id"></a> [orchestra\_account\_id](#input\_orchestra\_account\_id) | Your Orchestra account ID, which can be found in the Account Settings page on Orchestra. | `string` | n/a | yes |
+| <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Name of the resource group to deploy the Azure Container App Job into. | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to apply to all deployed resources ('Application' and 'DeployedBy' are included by default but can be overridden). | `map(string)` | `{}` | no |
 
 ## Outputs
