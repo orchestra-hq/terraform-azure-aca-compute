@@ -5,3 +5,9 @@ resource "azurerm_role_assignment" "container_app_job" {
   role_definition_name = "Container Apps Jobs Operator"
   principal_id         = azuread_service_principal.this.object_id
 }
+
+resource "azurerm_role_assignment" "key_vault_crypto_officer" {
+  scope                = azurerm_key_vault.this.id
+  role_definition_name = "Key Vault Crypto Officer"
+  principal_id         = azuread_service_principal.this.object_id
+}
