@@ -1,3 +1,22 @@
+locals {
+  integrations     = [for k in var.integrations : lower(k)]
+  python_versions  = ["3_12", "3_11"]
+  package_managers = ["PIP", "POETRY", "UV"]
+  task_defs = flatten([
+    for integration in local.integrations : [
+      for python_version in local.python_versions : [
+        for package_manager in local.package_managers : {
+          integration     = integration
+          python_version  = python_version
+          package_manager = package_manager
+          cpu             = var.compute_resources[integration].cpu
+          memory          = var.compute_resources[integration].memory
+        }
+      ]
+    ]
+  ])
+}
+
 data "azurerm_resource_group" "this" {
   name = var.resource_group_name
 }
@@ -12,7 +31,7 @@ data "azurerm_container_app_environment" "this" {
 resource "azurerm_log_analytics_workspace" "this" {
   count = local.create_container_app_environment ? 1 : 0
 
-  name                = local.name
+  name                = "${var.name_prefix}-log-analytics-${local.suffix}" # Check max length
   location            = data.azurerm_resource_group.this.location
   resource_group_name = data.azurerm_resource_group.this.name
   sku                 = "PerGB2018"
@@ -22,14 +41,16 @@ resource "azurerm_log_analytics_workspace" "this" {
 resource "azurerm_container_app_environment" "this" {
   count = local.create_container_app_environment ? 1 : 0
 
-  name                       = local.name
+  name                       = "${var.name_prefix}-aca-env-${local.suffix}" # Check max length
   location                   = data.azurerm_resource_group.this.location
   resource_group_name        = data.azurerm_resource_group.this.name
   log_analytics_workspace_id = azurerm_log_analytics_workspace.this[0].id
 }
 
 resource "azurerm_container_app_job" "this" {
-  name                         = substr(local.name, 0, 32)
+  for_each = { for task in local.task_defs : "${task.integration}_${task.python_version}_${task.package_manager}" => task }
+
+  name                         = "orc-${each.key}-${local.suffix}"
   resource_group_name          = data.azurerm_resource_group.this.name
   location                     = data.azurerm_resource_group.this.location
   container_app_environment_id = local.container_app_environment_id
@@ -54,7 +75,7 @@ resource "azurerm_container_app_job" "this" {
 
   template {
     container {
-      image  = "${var.docker_registry_server}/${var.image.name}:${var.image.tag}"
+      image  = "${var.docker_registry_server}/${each.value.integration}:${each.value.python_version}_${upper(each.value.package_manager)}-${var.image_tags[each.value.integration]}"
       name   = "compute-runner"
       cpu    = var.container_resources.cpu
       memory = var.container_resources.memory

@@ -46,15 +46,16 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_container_app_environment_name"></a> [container\_app\_environment\_name](#input\_container\_app\_environment\_name) | If set, this container app environment will be used to deploy the container app job. If not set, a new container app environment will be created. e.g. "test-environment" | `string` | `null` | no |
-| <a name="input_container_resources"></a> [container\_resources](#input\_container\_resources) | CPU and memory resources for the container. | <pre>object({<br/>    cpu    = string<br/>    memory = string<br/>  })</pre> | <pre>{<br/>  "cpu": "0.5",<br/>  "memory": "1Gi"<br/>}</pre> | no |
-| <a name="input_docker_registry_password"></a> [docker\_registry\_password](#input\_docker\_registry\_password) | Docker registry password. This can be found in the Orchestra Compute Resource UI. | `string` | n/a | yes |
-| <a name="input_docker_registry_server"></a> [docker\_registry\_server](#input\_docker\_registry\_server) | The server URL of Orchestra's region-specific docker registry. This can be found in the Orchestra Compute Resource UI. | `string` | n/a | yes |
-| <a name="input_docker_registry_username"></a> [docker\_registry\_username](#input\_docker\_registry\_username) | Docker registry username. This can be found in the Orchestra Compute Resource UI. | `string` | n/a | yes |
-| <a name="input_federated_credentials"></a> [federated\_credentials](#input\_federated\_credentials) | Set the subject and audience values for the federated credentials, which can be found in the Orchestra UI during Compute Resource set-up. | <pre>object({<br/>    subject  = string<br/>    audience = string<br/>  })</pre> | n/a | yes |
-| <a name="input_image"></a> [image](#input\_image) | The container image to be used for the container app job (without registry prefix). | <pre>object({<br/>    name = string<br/>    tag  = string<br/>  })</pre> | <pre>{<br/>  "name": "hello-world",<br/>  "tag": "test1"<br/>}</pre> | no |
+| <a name="input_compute_resources"></a> [compute\_resources](#input\_compute\_resources) | A map representing the compute resources (CPU and memory) to use for each integration. | <pre>map(object({<br/>    cpu    = number<br/>    memory = number<br/>  }))</pre> | <pre>{<br/>  "dbt_core": {<br/>    "cpu": "0.5",<br/>    "memory": "1Gi"<br/>  },<br/>  "python": {<br/>    "cpu": "0.5",<br/>    "memory": "1Gi"<br/>  }<br/>}</pre> | no |
+| <a name="input_container_app_environment_name"></a> [container\_app\_environment\_name](#input\_container\_app\_environment\_name) | If set, this container app environment will be used to deploy the container app job. If not set, a new container app environment will be created. | `string` | `null` | no |
+| <a name="input_docker_registry_password"></a> [docker\_registry\_password](#input\_docker\_registry\_password) | Docker registry password. Get this value from Orchestra's team. | `string` | n/a | yes |
+| <a name="input_docker_registry_server"></a> [docker\_registry\_server](#input\_docker\_registry\_server) | The URL of Orchestra's region-specific docker registry. Get this value from Orchestra's team. | `string` | n/a | yes |
+| <a name="input_docker_registry_username"></a> [docker\_registry\_username](#input\_docker\_registry\_username) | Docker registry username. Get this value from Orchestra's team. | `string` | n/a | yes |
+| <a name="input_federated_credential_audience"></a> [federated\_credential\_audience](#input\_federated\_credential\_audience) | Used to configure authentication within your Azure account. Get this value from Orchestra's team. | `string` | n/a | yes |
+| <a name="input_federated_credential_subject_id"></a> [federated\_credential\_subject\_id](#input\_federated\_credential\_subject\_id) | Used to configure authentication within your Azure account. Get this value from Orchestra's team. | `string` | n/a | yes |
+| <a name="input_image_tags"></a> [image\_tags](#input\_image\_tags) | A map representing the ACR image tags to use for each integration. | `map(string)` | <pre>{<br/>  "dbt_core": "2025.12.01-0",<br/>  "python": "2025.12.01-0"<br/>}</pre> | no |
+| <a name="input_integrations"></a> [integrations](#input\_integrations) | The integrations to deploy. Valid values are 'dbt\_core' and 'python'. | `list(string)` | n/a | yes |
 | <a name="input_name_prefix"></a> [name\_prefix](#input\_name\_prefix) | The name prefix to use for the resources created by this module. | `string` | n/a | yes |
-| <a name="input_orchestra_account_id"></a> [orchestra\_account\_id](#input\_orchestra\_account\_id) | Your Orchestra account ID, which can be found in the Account Settings page on Orchestra. | `string` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Name of the resource group to deploy the Azure Container App Job into. | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to apply to all deployed resources ('Application' and 'DeployedBy' are included by default but can be overridden). | `map(string)` | `{}` | no |
 
@@ -62,7 +63,7 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_app_registration_name"></a> [app\_registration\_name](#output\_app\_registration\_name) | App registration |
-| <a name="output_federated_credential_name"></a> [federated\_credential\_name](#output\_federated\_credential\_name) | Federated credentials |
-| <a name="output_service_principal_name"></a> [service\_principal\_name](#output\_service\_principal\_name) | Service principal |
+| <a name="output_orchestra_compute_resource_inputs"></a> [orchestra\_compute\_resource\_inputs](#output\_orchestra\_compute\_resource\_inputs) | n/a |
+| <a name="output_resource_group_name"></a> [resource\_group\_name](#output\_resource\_group\_name) | Paste this value into the "Resource Group Name" field in Orchestra |
+| <a name="output_unique_identifier"></a> [unique\_identifier](#output\_unique\_identifier) | Paste this value into the "Unique Identifier" field in Orchestra |
 <!-- END_TF_DOCS -->
