@@ -1,5 +1,5 @@
 resource "azurerm_role_assignment" "container_app_job" {
-  for_each = { for task in local.task_defs : "${task.integration}_${task.python_version}_${lower(task.package_manager)}" => task }
+  for_each = { for task in local.task_defs : "${replace(task.integration, "_", "-")}-${replace(task.python_version, "_", "-")}-${lower(task.package_manager)}" => task }
 
   scope                = azurerm_container_app_job.this[each.key].id
   role_definition_name = "Container Apps Jobs Operator"
