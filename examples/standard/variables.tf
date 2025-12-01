@@ -32,3 +32,7 @@ variable "subscription_id" {
   type      = string
   sensitive = true
 }
+
+variable "image_tags" {
+  type = map(string)
+}

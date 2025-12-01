@@ -12,10 +12,7 @@ module "this" {
 
   integrations = ["python", "dbt_core"]
 
-  image_tags = {
-    python   = "2025.12.01-0"
-    dbt_core = "2025.12.01-0"
-  }
+  image_tags = var.image_tags
 
   compute_resources = {
     python = {
