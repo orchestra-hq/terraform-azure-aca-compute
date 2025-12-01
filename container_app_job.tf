@@ -77,8 +77,8 @@ resource "azurerm_container_app_job" "this" {
     container {
       image  = "${var.docker_registry_server}/${each.value.integration}:${each.value.python_version}_${upper(each.value.package_manager)}-${var.image_tags[each.value.integration]}"
       name   = "compute-runner"
-      cpu    = var.container_resources.cpu
-      memory = var.container_resources.memory
+      cpu    = var.compute_resources[each.value.integration].cpu
+      memory = var.compute_resources[each.value.integration].memory
     }
   }
 }

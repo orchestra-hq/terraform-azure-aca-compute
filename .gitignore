@@ -1,8 +1,11 @@
-# Anything Terraform state related (in all folders)
+# Anything Terraform state related (in all folders)
 **/.terraform/*
 *.tfstate
 *.tfstate.*
 .terraform.lock.hcl
+
+# Auto-generated variable files
+*.auto.tfvars
 
 # Orchestra internal testing folder
 internal_testing/

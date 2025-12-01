@@ -15,11 +15,11 @@ terraform {
 
 provider "azurerm" {
   features {}
-  subscription_id = "<subscription-id>"
+  subscription_id = var.subscription_id
 }
 
 provider "azuread" {
-  tenant_id = "<tenant-id>"
+  tenant_id = var.tenant_id
 }
 
 provider "random" {}

@@ -55,7 +55,7 @@ variable "compute_resources" {
   description = "A map representing the compute resources (CPU and memory) to use for each integration."
   type = map(object({
     cpu    = number
-    memory = number
+    memory = string
   }))
   default = {
     python   = { cpu = "0.5", memory = "1Gi" }
