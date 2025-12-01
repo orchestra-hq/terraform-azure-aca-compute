@@ -17,10 +17,6 @@ locals {
   ])
 }
 
-data "azurerm_resource_group" "this" {
-  name = var.resource_group_name
-}
-
 data "azurerm_container_app_environment" "this" {
   count = local.create_container_app_environment ? 0 : 1
 
