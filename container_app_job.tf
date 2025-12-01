@@ -54,12 +54,12 @@ resource "azurerm_container_app_job" "this" {
   resource_group_name          = data.azurerm_resource_group.this.name
   location                     = data.azurerm_resource_group.this.location
   container_app_environment_id = local.container_app_environment_id
-  replica_timeout_in_seconds   = 1800 # TODO - Set this
+  replica_timeout_in_seconds   = 1800 # TODO - ENG-7994 - Decide this
   workload_profile_name        = "Consumption"
 
-  manual_trigger_config {
-    parallelism              = 1 # TODO - Set this
-    replica_completion_count = 1 # TODO - Set this
+  manual_trigger_config { # TODO - ENG-7994 - Decide this
+    parallelism              = 1
+    replica_completion_count = 1
   }
 
   registry {
