@@ -48,7 +48,7 @@ resource "azurerm_container_app_environment" "this" {
 }
 
 resource "azurerm_container_app_job" "this" {
-  for_each = { for task in local.task_defs : "${task.integration}_${task.python_version}_${task.package_manager}" => task }
+  for_each = { for task in local.task_defs : "${task.integration}_${task.python_version}_${lower(task.package_manager)}" => task }
 
   name                         = "orc-${each.key}-${local.suffix}"
   resource_group_name          = data.azurerm_resource_group.this.name
