@@ -1,10 +1,10 @@
 variable "name_prefix" {
-  description = "The name prefix to use for the resources created by this module."
+  description = "The name prefix to use for most resources created by this module."
   type        = string
 
   validation {
-    condition     = length(var.name_prefix) <= 25
-    error_message = "The name prefix must be less than 25 characters."
+    condition     = length(var.name_prefix) <= 40
+    error_message = "The name prefix must be 40 characters or fewer."
   }
   validation {
     condition     = length(var.name_prefix) >= 5

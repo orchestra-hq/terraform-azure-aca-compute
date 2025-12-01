@@ -31,7 +31,7 @@ data "azurerm_container_app_environment" "this" {
 resource "azurerm_log_analytics_workspace" "this" {
   count = local.create_container_app_environment ? 1 : 0
 
-  name                = "${var.name_prefix}-log-analytics-${local.suffix}" # Check max length
+  name                = "${var.name_prefix}-log-analytics-${local.suffix}"
   location            = data.azurerm_resource_group.this.location
   resource_group_name = data.azurerm_resource_group.this.name
   sku                 = "PerGB2018"
@@ -41,7 +41,7 @@ resource "azurerm_log_analytics_workspace" "this" {
 resource "azurerm_container_app_environment" "this" {
   count = local.create_container_app_environment ? 1 : 0
 
-  name                       = "${var.name_prefix}-aca-env-${local.suffix}" # Check max length
+  name                       = "${var.name_prefix}-aca-env-${local.suffix}"
   location                   = data.azurerm_resource_group.this.location
   resource_group_name        = data.azurerm_resource_group.this.name
   log_analytics_workspace_id = azurerm_log_analytics_workspace.this[0].id
