@@ -24,7 +24,7 @@ resource "azurerm_key_vault_key" "credential_encryption" {
     "wrapKey"
   ]
 
-  depends_on = [azurerm_role_assignment.key_vault_crypto_officer]
+  depends_on = [azurerm_role_assignment.secrets_management, azurerm_role_assignment.secrets_management_current_user]
 }
 
 resource "azurerm_storage_account" "credential_management" {

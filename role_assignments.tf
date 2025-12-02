@@ -6,8 +6,14 @@ resource "azurerm_role_assignment" "container_app_job" {
   principal_id         = azuread_service_principal.this.object_id
 }
 
-resource "azurerm_role_assignment" "key_vault_crypto_officer" {
+resource "azurerm_role_assignment" "secrets_management" {
   scope                = azurerm_key_vault.this.id
   role_definition_name = "Key Vault Crypto Officer"
   principal_id         = azuread_service_principal.this.object_id
+}
+
+resource "azurerm_role_assignment" "secrets_management_current_user" {
+  scope                = azurerm_key_vault.this.id
+  role_definition_name = "Key Vault Crypto Officer"
+  principal_id         = data.azurerm_client_config.current.object_id
 }

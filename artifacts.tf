@@ -1,5 +1,5 @@
-resource "azurerm_storage_account" "artifacts" {
-  name                     = "orcartifacts${local.suffix}"
+resource "azurerm_storage_account" "artifacts" { # TODO - Merge into one storage account, https://orcstorage<suffix>.blob.core.windows.net
+  name                     = "orcrtifacts${local.suffix}"
   resource_group_name      = data.azurerm_resource_group.this.name
   location                 = data.azurerm_resource_group.this.location
   account_tier             = "Standard"
