@@ -1,10 +1,10 @@
 variable "name_prefix" {
-  description = "The name prefix to use for the resources created by this module."
+  description = "The name prefix to use for most resources created by this module."
   type        = string
 
   validation {
-    condition     = length(var.name_prefix) <= 25
-    error_message = "The name prefix must be less than 25 characters."
+    condition     = length(var.name_prefix) <= 40
+    error_message = "The name prefix must be 40 characters or fewer."
   }
   validation {
     condition     = length(var.name_prefix) >= 5
@@ -17,28 +17,54 @@ variable "name_prefix" {
   }
 }
 
-variable "orchestra_account_id" {
-  description = "Your Orchestra account ID, which can be found in the Account Settings page on Orchestra."
-  type        = string
-}
-
-variable "federated_credentials" {
-  description = "Set the subject and audience values for the federated credentials, which can be found in the Orchestra UI during Compute Resource set-up."
-  type = object({
-    subject  = string
-    audience = string
-  })
-}
-
 variable "resource_group_name" {
   description = "Name of the resource group to deploy the Azure Container App Job into."
   type        = string
 }
 
 variable "container_app_environment_name" {
-  description = "If set, this container app environment will be used to deploy the container app job. If not set, a new container app environment will be created. e.g. \"test-environment\""
+  description = "If set, this container app environment will be used to deploy the container app job. If not set, a new container app environment will be created."
   type        = string
   default     = null
+}
+
+variable "integrations" {
+  description = "The integrations to deploy. Valid values are 'dbt_core' and 'python'."
+  type        = list(string)
+
+  validation {
+    condition     = alltrue([for integration in var.integrations : contains(["dbt_core", "python"], integration)])
+    error_message = "The integrations must be one of 'dbt_core' or 'python'."
+  }
+}
+
+variable "image_tags" {
+  description = "A map representing the ACR image tags to use for each integration."
+  type        = map(string)
+  default = { # TODO - ENG-7994 - Update these once we have a version that can run on Azure
+    python   = "2025.12.01-0",
+    dbt_core = "2025.12.01-0"
+  }
+  validation {
+    condition     = alltrue([for k in var.integrations : contains(keys(var.image_tags), lower(k))])
+    error_message = "Each integration must have an image tag defined."
+  }
+}
+
+variable "compute_resources" {
+  description = "A map representing the compute resources (CPU and memory) to use for each integration."
+  type = map(object({
+    cpu    = number
+    memory = string
+  }))
+  default = {
+    python   = { cpu = "0.5", memory = "1Gi" }
+    dbt_core = { cpu = "0.5", memory = "1Gi" }
+  }
+  validation {
+    condition     = alltrue([for k in var.integrations : contains(keys(var.compute_resources), lower(k))])
+    error_message = "Each integration must have compute resources defined."
+  }
 }
 
 variable "tags" { # TODO - Set this up
@@ -48,42 +74,28 @@ variable "tags" { # TODO - Set this up
   default = {}
 }
 
+variable "federated_credential_subject_id" {
+  description = "Used to configure authentication within your Azure account. Get this value from Orchestra's team."
+  type        = string
+}
+
+variable "federated_credential_audience" {
+  description = "Used to configure authentication within your Azure account. Get this value from Orchestra's team."
+  type        = string
+}
+
 variable "docker_registry_server" {
-  description = "The server URL of Orchestra's region-specific docker registry. This can be found in the Orchestra Compute Resource UI."
+  description = "The URL of Orchestra's region-specific docker registry. Get this value from Orchestra's team."
   type        = string
 }
 
 variable "docker_registry_username" {
-  description = "Docker registry username. This can be found in the Orchestra Compute Resource UI."
+  description = "Docker registry username. Get this value from Orchestra's team."
   type        = string
 }
 
 variable "docker_registry_password" {
-  description = "Docker registry password. This can be found in the Orchestra Compute Resource UI."
+  description = "Docker registry password. Get this value from Orchestra's team."
   type        = string
   sensitive   = true
-}
-
-variable "image" {
-  description = "The container image to be used for the container app job (without registry prefix)."
-  type = object({
-    name = string
-    tag  = string
-  })
-  default = {
-    name = "hello-world"
-    tag  = "test1"
-  }
-}
-
-variable "container_resources" {
-  description = "CPU and memory resources for the container."
-  type = object({
-    cpu    = string
-    memory = string
-  })
-  default = {
-    cpu    = "0.5"
-    memory = "1Gi"
-  }
 }

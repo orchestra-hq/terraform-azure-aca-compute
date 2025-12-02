@@ -1,14 +1,11 @@
-output "app_registration_name" {
-  value       = azuread_application.this.display_name
-  description = "App registration"
-}
-
-output "service_principal_name" {
-  value       = azuread_service_principal.this.display_name
-  description = "Service principal"
-}
-
-output "federated_credential_name" {
-  value       = azuread_application_federated_identity_credential.this.display_name
-  description = "Federated credentials"
+output "orchestra_compute_resource_inputs" {
+  value = <<-EOT
+Enter the following values in the Orchestra UI:
+- Tenant ID: ${data.azurerm_client_config.current.tenant_id}
+- Subscription ID: ${data.azurerm_subscription.current.subscription_id}
+- Client ID: ${azuread_application.this.client_id}
+- Unique Identifier: ${var.name_prefix}-compute-${local.suffix}
+- Resource group name: ${var.resource_group_name}
+- Container app environment id: ${local.container_app_environment_id}
+EOT
 }

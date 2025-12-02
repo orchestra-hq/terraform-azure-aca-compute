@@ -1,23 +1,27 @@
 module "this" {
   source = "../../"
 
-  name_prefix                    = "orchestra-compute"
-  orchestra_account_id           = "1234567890"
-  federated_credentials          = var.federated_credentials
-  resource_group_name            = "hybrid-compute-dev"
-  container_app_environment_name = "dev"
+  name_prefix                     = "orchestra-compute"
+  resource_group_name             = "hybrid-compute-examples-standard"
+  federated_credential_subject_id = var.federated_credential_subject_id
+  federated_credential_audience   = var.federated_credential_audience
 
-  docker_registry_server   = "orchestra-example-registry.azurecr.io"
-  docker_registry_username = "username"
+  docker_registry_server   = var.docker_registry_server
+  docker_registry_username = var.docker_registry_username
   docker_registry_password = var.docker_registry_password
 
-  image = {
-    name = "example-image"
-    tag  = "v1.0.0"
-  }
+  integrations = ["python", "dbt_core"]
 
-  container_resources = {
-    cpu    = "0.5"
-    memory = "1Gi"
+  image_tags = var.image_tags
+
+  compute_resources = {
+    python = {
+      cpu    = "0.5"
+      memory = "1Gi"
+    }
+    dbt_core = {
+      cpu    = "0.5"
+      memory = "1Gi"
+    }
   }
 }
