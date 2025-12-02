@@ -17,3 +17,9 @@ resource "azurerm_role_assignment" "secrets_management_current_user" {
   role_definition_name = "Key Vault Crypto Officer"
   principal_id         = data.azurerm_client_config.current.object_id
 }
+
+resource "azurerm_role_assignment" "storage_blob_data" {
+  scope                = azurerm_storage_account.this.id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = azuread_service_principal.this.object_id
+}
