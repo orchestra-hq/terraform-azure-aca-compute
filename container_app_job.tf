@@ -68,6 +68,10 @@ resource "azurerm_container_app_job" "this" {
     value = var.docker_registry_password
   }
 
+  identity {
+    type = "SystemAssigned"
+  }
+
   template {
     container {
       image  = "${var.docker_registry_server}/${replace(each.value.integration, "_", "-")}:${each.value.python_version}_${upper(each.value.package_manager)}-${var.image_tags[each.value.integration]}"
@@ -76,4 +80,28 @@ resource "azurerm_container_app_job" "this" {
       memory = var.compute_resources[each.value.integration].memory
     }
   }
+}
+
+resource "azurerm_role_assignment" "container_app_job_secrets_storage" {
+  for_each = { for task in local.task_defs : "${replace(task.integration, "_", "-")}-${replace(task.python_version, "_", "-")}-${lower(task.package_manager)}" => task }
+
+  scope                = azurerm_storage_container.credential_management.id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = azurerm_container_app_job.this[each.key].identity[0].principal_id
+}
+
+resource "azurerm_role_assignment" "container_app_job_artifacts_storage" {
+  for_each = { for task in local.task_defs : "${replace(task.integration, "_", "-")}-${replace(task.python_version, "_", "-")}-${lower(task.package_manager)}" => task }
+
+  scope                = azurerm_storage_container.artifacts.id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = azurerm_container_app_job.this[each.key].identity[0].principal_id
+}
+
+resource "azurerm_role_assignment" "container_app_job_key_vault_decrypt" {
+  for_each = { for task in local.task_defs : "${replace(task.integration, "_", "-")}-${replace(task.python_version, "_", "-")}-${lower(task.package_manager)}" => task }
+
+  scope                = azurerm_key_vault.this.id
+  role_definition_name = "Key Vault Crypto User"
+  principal_id         = azurerm_container_app_job.this[each.key].identity[0].principal_id
 }
