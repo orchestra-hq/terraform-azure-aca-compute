@@ -59,7 +59,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_aca_job_timeout_in_seconds"></a> [aca\_job\_timeout\_in\_seconds](#input\_aca\_job\_timeout\_in\_seconds) | The timeout for a container app job replica to complete. | `number` | `216000` | no |
+| <a name="input_aca_job_timeout_in_seconds"></a> [aca\_job\_timeout\_in\_seconds](#input\_aca\_job\_timeout\_in\_seconds) | The timeout for a container app job replica to complete. | `number` | `22200` | no |
 | <a name="input_compute_resources"></a> [compute\_resources](#input\_compute\_resources) | A map representing the compute resources (CPU and memory) to use for each integration. | <pre>map(object({<br/>    cpu    = number<br/>    memory = string<br/>  }))</pre> | <pre>{<br/>  "dbt_core": {<br/>    "cpu": "0.5",<br/>    "memory": "1Gi"<br/>  },<br/>  "python": {<br/>    "cpu": "0.5",<br/>    "memory": "1Gi"<br/>  }<br/>}</pre> | no |
 | <a name="input_container_app_environment_name"></a> [container\_app\_environment\_name](#input\_container\_app\_environment\_name) | If set, this container app environment will be used to deploy the container app job. If not set, a new container app environment will be created. | `string` | `null` | no |
 | <a name="input_docker_registry_password"></a> [docker\_registry\_password](#input\_docker\_registry\_password) | Docker registry password. Get this value from Orchestra's team. | `string` | n/a | yes |
