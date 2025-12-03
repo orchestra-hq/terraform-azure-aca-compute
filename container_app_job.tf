@@ -32,6 +32,7 @@ resource "azurerm_log_analytics_workspace" "this" {
   resource_group_name = data.azurerm_resource_group.this.name
   sku                 = "PerGB2018"
   retention_in_days   = 30
+  tags                = local.tags
 }
 
 resource "azurerm_container_app_environment" "this" {
@@ -41,6 +42,7 @@ resource "azurerm_container_app_environment" "this" {
   location                   = data.azurerm_resource_group.this.location
   resource_group_name        = data.azurerm_resource_group.this.name
   log_analytics_workspace_id = azurerm_log_analytics_workspace.this[0].id
+  tags                       = local.tags
 }
 
 resource "azurerm_container_app_job" "this" {
@@ -51,6 +53,7 @@ resource "azurerm_container_app_job" "this" {
   location                     = data.azurerm_resource_group.this.location
   container_app_environment_id = local.container_app_environment_id
   replica_timeout_in_seconds   = 1800 # TODO - ENG-7994 - Decide this
+  tags                         = local.tags
 
   manual_trigger_config { # TODO - ENG-7994 - Decide this
     parallelism              = 1

@@ -67,11 +67,10 @@ variable "compute_resources" {
   }
 }
 
-variable "tags" { # TODO - Set this up
+variable "tags" {
   type        = map(string)
   description = "Tags to apply to all deployed resources ('Application' and 'DeployedBy' are included by default but can be overridden)."
-
-  default = {}
+  default     = {}
 }
 
 variable "federated_credential_subject_id" {
