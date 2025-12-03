@@ -74,7 +74,7 @@ variable "aca_job_timeout_in_seconds" {
 }
 
 variable "container_app_job_env_vars" {
-  description = "A map of non-secret environment variables (key:value pairs) to pass to container app jobs."
+  description = "A map of non-secret environment variables (key:value pairs) to pass to container app jobs. Environment variables can be configured either via Terraform or Orchestra's \"Compute Resources\" UI."
   type        = map(string)
   default     = {}
 
@@ -88,7 +88,7 @@ variable "container_app_job_env_vars" {
 }
 
 variable "container_app_job_secret_env_vars" {
-  description = "A map of secret environment variables (key:value pairs) to pass to container app jobs."
+  description = "A map of secret environment variables (key:value pairs) to pass to container app jobs. Environment variables can be configured either via Terraform or Orchestra's \"Compute Resources\" UI."
   type        = map(string)
   default     = {}
   sensitive   = true
