@@ -73,6 +73,35 @@ variable "aca_job_timeout_in_seconds" {
   default     = (60 * 60 * 6) + 600 # 6 hours + 10 minutes, to exceed Orchestra's maximum timeout
 }
 
+variable "container_app_job_env_vars" {
+  description = "A map of non-secret environment variables (key:value pairs) to pass to container app jobs."
+  type        = map(string)
+  default     = {}
+
+  validation {
+    condition = alltrue([
+      for key in keys(var.container_app_job_secret_env_vars) :
+      can(regex("^[a-zA-Z_]+$", key))
+    ])
+    error_message = "Secret environment variable keys must only contain letters and underscores."
+  }
+}
+
+variable "container_app_job_secret_env_vars" {
+  description = "A map of secret environment variables (key:value pairs) to pass to container app jobs."
+  type        = map(string)
+  default     = {}
+  sensitive   = true
+
+  validation {
+    condition = alltrue([
+      for key in keys(var.container_app_job_secret_env_vars) :
+      can(regex("^[a-zA-Z_]+$", key))
+    ])
+    error_message = "Secret environment variable keys must only contain letters and underscores."
+  }
+}
+
 variable "tags" {
   type        = map(string)
   description = "Tags to apply to all deployed resources ('Application' and 'DeployedBy' are included by default but can be overridden)."

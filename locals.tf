@@ -10,6 +10,11 @@ locals {
     },
     var.tags,
   )
+
+  normalized_secret_names = {
+    for key, value in var.container_app_job_secret_env_vars :
+    key => replace(lower(key), "_", "-")
+  }
 }
 
 resource "random_id" "random_suffix" {

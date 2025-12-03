@@ -73,6 +73,14 @@ resource "azurerm_container_app_job" "this" {
     value = var.docker_registry_password
   }
 
+  dynamic "secret" {
+    for_each = var.container_app_job_secret_env_vars
+    content {
+      name  = local.normalized_secret_names[secret.key]
+      value = secret.value
+    }
+  }
+
   identity {
     type = "SystemAssigned"
   }
@@ -83,6 +91,22 @@ resource "azurerm_container_app_job" "this" {
       name   = "compute-runner"
       cpu    = var.compute_resources[each.value.integration].cpu
       memory = var.compute_resources[each.value.integration].memory
+
+      dynamic "env" {
+        for_each = var.container_app_job_env_vars
+        content {
+          name  = env.key
+          value = env.value
+        }
+      }
+
+      dynamic "env" {
+        for_each = var.container_app_job_secret_env_vars
+        content {
+          name        = env.key
+          secret_name = local.normalized_secret_names[env.key]
+        }
+      }
     }
   }
 }
