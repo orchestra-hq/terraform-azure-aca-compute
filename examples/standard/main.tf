@@ -24,4 +24,12 @@ module "this" {
       memory = "1Gi"
     }
   }
+
+  container_app_job_env_vars = {
+    EXAMPLE_KEY = "example_key"
+  }
+
+  container_app_job_secret_env_vars = {
+    EXAMPLE_SECRET_VALUE = "example_secret_value"
+  }
 }
