@@ -8,6 +8,7 @@ resource "azurerm_key_vault" "this" {
   soft_delete_retention_days = 30
   purge_protection_enabled   = false
   rbac_authorization_enabled = true
+  tags                       = local.tags
 }
 
 resource "azurerm_role_assignment" "secrets_management_current_user" {
@@ -27,6 +28,7 @@ resource "azurerm_key_vault_key" "credential_encryption" {
     "unwrapKey",
     "wrapKey"
   ]
+  tags = local.tags
 
   depends_on = [azurerm_role_assignment.secrets_management_current_user]
 }

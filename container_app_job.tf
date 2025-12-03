@@ -32,6 +32,7 @@ resource "azurerm_log_analytics_workspace" "this" {
   resource_group_name = data.azurerm_resource_group.this.name
   sku                 = "PerGB2018"
   retention_in_days   = 30
+  tags                = local.tags
 }
 
 resource "azurerm_container_app_environment" "this" {
@@ -41,6 +42,7 @@ resource "azurerm_container_app_environment" "this" {
   location                   = data.azurerm_resource_group.this.location
   resource_group_name        = data.azurerm_resource_group.this.name
   log_analytics_workspace_id = azurerm_log_analytics_workspace.this[0].id
+  tags                       = local.tags
 }
 
 resource "azurerm_container_app_job" "this" {
@@ -50,9 +52,12 @@ resource "azurerm_container_app_job" "this" {
   resource_group_name          = data.azurerm_resource_group.this.name
   location                     = data.azurerm_resource_group.this.location
   container_app_environment_id = local.container_app_environment_id
-  replica_timeout_in_seconds   = 1800 # TODO - ENG-7994 - Decide this
+  replica_timeout_in_seconds   = var.aca_job_timeout_in_seconds
+  tags                         = local.tags
 
-  manual_trigger_config { # TODO - ENG-7994 - Decide this
+  # Parallelism refers to number of replicas per execution
+  # We trigger separate executions per task run, so we set parallelism to 1
+  manual_trigger_config {
     parallelism              = 1
     replica_completion_count = 1
   }
