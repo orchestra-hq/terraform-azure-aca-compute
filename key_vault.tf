@@ -13,7 +13,7 @@ resource "azurerm_key_vault" "this" {
 resource "azurerm_key_vault_key" "credential_encryption" {
   for_each = toset(local.integrations)
 
-  name         = "${var.name_prefix}-key-integration-${replace(each.key, "_", "-")}-${local.suffix}"
+  name         = "${var.name_prefix}-integration-${replace(each.key, "_", "-")}-${local.suffix}"
   key_vault_id = azurerm_key_vault.this.id
   key_type     = "RSA"
   key_size     = 2048
