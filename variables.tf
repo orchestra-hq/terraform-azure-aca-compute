@@ -80,7 +80,7 @@ variable "container_app_job_env_vars" {
 
   validation {
     condition = alltrue([
-      for key in keys(var.container_app_job_secret_env_vars) :
+      for key in keys(var.container_app_job_env_vars) :
       can(regex("^[a-zA-Z_]+$", key))
     ])
     error_message = "Secret environment variable keys must only contain letters and underscores."
