@@ -10,6 +10,12 @@ resource "azurerm_key_vault" "this" {
   rbac_authorization_enabled = true
 }
 
+resource "azurerm_role_assignment" "secrets_management_current_user" {
+  scope                = azurerm_key_vault.this.id
+  role_definition_name = "Key Vault Crypto Officer"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
+
 resource "azurerm_key_vault_key" "credential_encryption" {
   name         = "${var.name_prefix}-kv-key-${local.suffix}"
   key_vault_id = azurerm_key_vault.this.id
