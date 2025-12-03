@@ -52,10 +52,12 @@ resource "azurerm_container_app_job" "this" {
   resource_group_name          = data.azurerm_resource_group.this.name
   location                     = data.azurerm_resource_group.this.location
   container_app_environment_id = local.container_app_environment_id
-  replica_timeout_in_seconds   = 1800 # TODO - ENG-7994 - Decide this
+  replica_timeout_in_seconds   = 1800 # 30 minutes
   tags                         = local.tags
 
-  manual_trigger_config { # TODO - ENG-7994 - Decide this
+  # Parallelism refers to number of replicas per execution
+  # We trigger separate executions per task run, so we set parallelism to 1
+  manual_trigger_config {
     parallelism              = 1
     replica_completion_count = 1
   }
