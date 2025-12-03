@@ -11,9 +11,7 @@ resource "azurerm_key_vault" "this" {
 }
 
 resource "azurerm_key_vault_key" "credential_encryption" {
-  for_each = toset(local.integrations)
-
-  name         = "${var.name_prefix}-integration-${replace(each.key, "_", "-")}-${local.suffix}"
+  name         = "${var.name_prefix}-kv-key-${local.suffix}"
   key_vault_id = azurerm_key_vault.this.id
   key_type     = "RSA"
   key_size     = 2048
@@ -24,5 +22,5 @@ resource "azurerm_key_vault_key" "credential_encryption" {
     "wrapKey"
   ]
 
-  depends_on = [azurerm_role_assignment.secrets_management, azurerm_role_assignment.secrets_management_current_user]
+  depends_on = [azurerm_role_assignment.secrets_management_current_user]
 }

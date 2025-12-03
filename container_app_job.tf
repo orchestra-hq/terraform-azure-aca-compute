@@ -68,6 +68,10 @@ resource "azurerm_container_app_job" "this" {
     value = var.docker_registry_password
   }
 
+  identity {
+    type = "SystemAssigned"
+  }
+
   template {
     container {
       image  = "${var.docker_registry_server}/${replace(each.value.integration, "_", "-")}:${each.value.python_version}_${upper(each.value.package_manager)}-${var.image_tags[each.value.integration]}"
