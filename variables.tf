@@ -67,6 +67,12 @@ variable "compute_resources" {
   }
 }
 
+variable "aca_job_timeout_in_seconds" {
+  description = "The timeout for a container app job replica to complete."
+  type        = number
+  default     = 60 * 60 * 60 # 60 hours is Orchestra's maximum timeout
+}
+
 variable "tags" {
   type        = map(string)
   description = "Tags to apply to all deployed resources ('Application' and 'DeployedBy' are included by default but can be overridden)."
