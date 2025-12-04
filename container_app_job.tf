@@ -116,6 +116,11 @@ resource "azurerm_container_app_job" "this" {
           secret_name = local.normalized_secret_names[env.key]
         }
       }
+
+      env {
+        name  = "ORCHESTRA_MANAGED_IDENTITY_CLIENT_ID"
+        value = azurerm_user_assigned_identity.this[each.key].client_id
+      }
     }
   }
 }
