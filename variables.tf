@@ -23,7 +23,7 @@ variable "resource_group_name" {
 }
 
 variable "container_app_environment_name" {
-  description = "If set, this container app environment will be used to deploy the container app job. If not set, a new container app environment will be created."
+  description = "Set this to the container app environment that the container app jobs will be deployed into. If not set, a public environment will be created."
   type        = string
   default     = null
 }
@@ -31,6 +31,7 @@ variable "container_app_environment_name" {
 variable "integrations" {
   description = "The integrations to deploy. Valid values are 'dbt_core' and 'python'."
   type        = list(string)
+  default     = ["python", "dbt_core"]
 
   validation {
     condition     = alltrue([for integration in var.integrations : contains(["dbt_core", "python"], integration)])
@@ -41,9 +42,9 @@ variable "integrations" {
 variable "image_tags" {
   description = "A map representing the ACR image tags to use for each integration."
   type        = map(string)
-  default = { # TODO - ENG-7994 - Update these once we have a version that can run on Azure
-    python   = "2025.12.01-0",
-    dbt_core = "2025.12.01-0"
+  default = { # TODO - ENG-7994 - Update these once we publish a version that can run on Azure
+    python   = "2025.12.08-0",
+    dbt_core = "2025.12.08-0"
   }
   validation {
     condition     = alltrue([for k in var.integrations : contains(keys(var.image_tags), lower(k))])
