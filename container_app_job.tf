@@ -45,6 +45,14 @@ resource "azurerm_container_app_environment" "this" {
   tags                       = local.tags
 }
 
+resource "azurerm_user_assigned_identity" "this" {
+  for_each = { for task in local.task_defs : "${replace(task.integration, "_", "-")}-${replace(task.python_version, "_", "-")}-${lower(task.package_manager)}" => task }
+
+  name                = "orc-mi-${each.key}-${local.suffix}"
+  resource_group_name = data.azurerm_resource_group.this.name
+  location            = data.azurerm_resource_group.this.location
+}
+
 resource "azurerm_container_app_job" "this" {
   for_each = { for task in local.task_defs : "${replace(task.integration, "_", "-")}-${replace(task.python_version, "_", "-")}-${lower(task.package_manager)}" => task }
 
@@ -82,7 +90,8 @@ resource "azurerm_container_app_job" "this" {
   }
 
   identity {
-    type = "SystemAssigned"
+    type         = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.this[each.key].id]
   }
 
   template {
@@ -107,6 +116,11 @@ resource "azurerm_container_app_job" "this" {
           secret_name = local.normalized_secret_names[env.key]
         }
       }
+
+      env {
+        name  = "ORCHESTRA_MANAGED_IDENTITY_CLIENT_ID"
+        value = azurerm_user_assigned_identity.this[each.key].client_id
+      }
     }
   }
 }
@@ -116,7 +130,7 @@ resource "azurerm_role_assignment" "container_app_job_secrets_storage" {
 
   scope                = azurerm_storage_container.credential_management.id
   role_definition_name = "Storage Blob Data Contributor"
-  principal_id         = azurerm_container_app_job.this[each.key].identity[0].principal_id
+  principal_id         = azurerm_user_assigned_identity.this[each.key].principal_id
 }
 
 resource "azurerm_role_assignment" "container_app_job_artifacts_storage" {
@@ -124,7 +138,7 @@ resource "azurerm_role_assignment" "container_app_job_artifacts_storage" {
 
   scope                = azurerm_storage_container.artifacts.id
   role_definition_name = "Storage Blob Data Contributor"
-  principal_id         = azurerm_container_app_job.this[each.key].identity[0].principal_id
+  principal_id         = azurerm_user_assigned_identity.this[each.key].principal_id
 }
 
 resource "azurerm_role_assignment" "container_app_job_key_vault_decrypt" {
@@ -132,5 +146,5 @@ resource "azurerm_role_assignment" "container_app_job_key_vault_decrypt" {
 
   scope                = azurerm_key_vault.this.id
   role_definition_name = "Key Vault Crypto User"
-  principal_id         = azurerm_container_app_job.this[each.key].identity[0].principal_id
+  principal_id         = azurerm_user_assigned_identity.this[each.key].principal_id
 }

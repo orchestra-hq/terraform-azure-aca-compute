@@ -20,10 +20,8 @@ resource "azuread_application_federated_identity_credential" "this" {
   subject   = var.federated_credential_subject_id
 }
 
-resource "azurerm_role_assignment" "container_app_job" {
-  for_each = { for task in local.task_defs : "${replace(task.integration, "_", "-")}-${replace(task.python_version, "_", "-")}-${lower(task.package_manager)}" => task }
-
-  scope                = azurerm_container_app_job.this[each.key].id
+resource "azurerm_role_assignment" "container_app_job_resource_group" {
+  scope                = data.azurerm_resource_group.this.id
   role_definition_name = "Container Apps Jobs Contributor"
   principal_id         = azuread_service_principal.this.object_id
 }
@@ -37,5 +35,11 @@ resource "azurerm_role_assignment" "secrets_management" {
 resource "azurerm_role_assignment" "storage_blob_data" {
   scope                = azurerm_storage_account.this.id
   role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = azuread_service_principal.this.object_id
+}
+
+resource "azurerm_role_assignment" "log_analytics_contributor" {
+  scope                = data.azurerm_resource_group.this.id
+  role_definition_name = "Log Analytics Reader"
   principal_id         = azuread_service_principal.this.object_id
 }
