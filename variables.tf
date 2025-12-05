@@ -23,7 +23,7 @@ variable "resource_group_name" {
 }
 
 variable "container_app_environment_name" {
-  description = "If set, this container app environment will be used to deploy the container app job. If not set, a new container app environment will be created."
+  description = "Set this to the container app environment that the container app jobs will be deployed into. If not set, a public environment will be created."
   type        = string
   default     = null
 }

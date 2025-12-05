@@ -1,6 +1,6 @@
 # terraform-azure-aca-compute
 
-Deploy an Azure Container App Job (with relevant resources) for a hybrid compute option with Orchestra.
+Deploy an Azure Container App Job (with relevant resources) for a hybrid compute option with Orchestra. See [Orchestra docs](https://docs.getorchestra.io/docs/deployment-options/hybrid/aca_jobs) for more details.
 
 ## Contributing
 
@@ -63,7 +63,7 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_aca_job_timeout_in_seconds"></a> [aca\_job\_timeout\_in\_seconds](#input\_aca\_job\_timeout\_in\_seconds) | The timeout for a container app job replica to complete. | `number` | `22200` | no |
 | <a name="input_compute_resources"></a> [compute\_resources](#input\_compute\_resources) | A map representing the compute resources (CPU and memory) to use for each integration. | <pre>map(object({<br/>    cpu    = number<br/>    memory = string<br/>  }))</pre> | <pre>{<br/>  "dbt_core": {<br/>    "cpu": "0.5",<br/>    "memory": "1Gi"<br/>  },<br/>  "python": {<br/>    "cpu": "0.5",<br/>    "memory": "1Gi"<br/>  }<br/>}</pre> | no |
-| <a name="input_container_app_environment_name"></a> [container\_app\_environment\_name](#input\_container\_app\_environment\_name) | If set, this container app environment will be used to deploy the container app job. If not set, a new container app environment will be created. | `string` | `null` | no |
+| <a name="input_container_app_environment_name"></a> [container\_app\_environment\_name](#input\_container\_app\_environment\_name) | Set this to the container app environment that the container app jobs will be deployed into. If not set, a public environment will be created. | `string` | `null` | no |
 | <a name="input_container_app_job_env_vars"></a> [container\_app\_job\_env\_vars](#input\_container\_app\_job\_env\_vars) | A map of non-secret environment variables (key:value pairs) to pass to container app jobs. Environment variables can be configured either via Terraform or Orchestra's "Compute Resources" UI. | `map(string)` | `{}` | no |
 | <a name="input_container_app_job_secret_env_vars"></a> [container\_app\_job\_secret\_env\_vars](#input\_container\_app\_job\_secret\_env\_vars) | A map of secret environment variables (key:value pairs) to pass to container app jobs. Environment variables can be configured either via Terraform or Orchestra's "Compute Resources" UI. | `map(string)` | `{}` | no |
 | <a name="input_docker_registry_password"></a> [docker\_registry\_password](#input\_docker\_registry\_password) | Docker registry password. Get this value from Orchestra's team. | `string` | n/a | yes |
