@@ -1,6 +1,6 @@
 # terraform-azure-aca-compute
 
-Deploy an Azure Container App Job (with relevant resources) for a hybrid compute option with Orchestra.
+Deploy an Azure Container App Job (with relevant resources) for a hybrid compute option with Orchestra. See [Orchestra docs](https://docs.getorchestra.io/docs/deployment-options/hybrid/aca_jobs) for more details.
 
 ## Contributing
 
@@ -63,7 +63,7 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_aca_job_timeout_in_seconds"></a> [aca\_job\_timeout\_in\_seconds](#input\_aca\_job\_timeout\_in\_seconds) | The timeout for a container app job replica to complete. | `number` | `22200` | no |
 | <a name="input_compute_resources"></a> [compute\_resources](#input\_compute\_resources) | A map representing the compute resources (CPU and memory) to use for each integration. | <pre>map(object({<br/>    cpu    = number<br/>    memory = string<br/>  }))</pre> | <pre>{<br/>  "dbt_core": {<br/>    "cpu": "0.5",<br/>    "memory": "1Gi"<br/>  },<br/>  "python": {<br/>    "cpu": "0.5",<br/>    "memory": "1Gi"<br/>  }<br/>}</pre> | no |
-| <a name="input_container_app_environment_name"></a> [container\_app\_environment\_name](#input\_container\_app\_environment\_name) | If set, this container app environment will be used to deploy the container app job. If not set, a new container app environment will be created. | `string` | `null` | no |
+| <a name="input_container_app_environment_name"></a> [container\_app\_environment\_name](#input\_container\_app\_environment\_name) | Set this to the container app environment that the container app jobs will be deployed into. If not set, a public environment will be created. | `string` | `null` | no |
 | <a name="input_container_app_job_env_vars"></a> [container\_app\_job\_env\_vars](#input\_container\_app\_job\_env\_vars) | A map of non-secret environment variables (key:value pairs) to pass to container app jobs. Environment variables can be configured either via Terraform or Orchestra's "Compute Resources" UI. | `map(string)` | `{}` | no |
 | <a name="input_container_app_job_secret_env_vars"></a> [container\_app\_job\_secret\_env\_vars](#input\_container\_app\_job\_secret\_env\_vars) | A map of secret environment variables (key:value pairs) to pass to container app jobs. Environment variables can be configured either via Terraform or Orchestra's "Compute Resources" UI. | `map(string)` | `{}` | no |
 | <a name="input_docker_registry_password"></a> [docker\_registry\_password](#input\_docker\_registry\_password) | Docker registry password. Get this value from Orchestra's team. | `string` | n/a | yes |
@@ -71,8 +71,8 @@ No modules.
 | <a name="input_docker_registry_username"></a> [docker\_registry\_username](#input\_docker\_registry\_username) | Docker registry username. Get this value from Orchestra's team. | `string` | n/a | yes |
 | <a name="input_federated_credential_audience"></a> [federated\_credential\_audience](#input\_federated\_credential\_audience) | Used to configure authentication within your Azure account. Get this value from Orchestra's team. | `string` | n/a | yes |
 | <a name="input_federated_credential_subject_id"></a> [federated\_credential\_subject\_id](#input\_federated\_credential\_subject\_id) | Used to configure authentication within your Azure account. Get this value from Orchestra's team. | `string` | n/a | yes |
-| <a name="input_image_tags"></a> [image\_tags](#input\_image\_tags) | A map representing the ACR image tags to use for each integration. | `map(string)` | <pre>{<br/>  "dbt_core": "2025.12.01-0",<br/>  "python": "2025.12.01-0"<br/>}</pre> | no |
-| <a name="input_integrations"></a> [integrations](#input\_integrations) | The integrations to deploy. Valid values are 'dbt\_core' and 'python'. | `list(string)` | n/a | yes |
+| <a name="input_image_tags"></a> [image\_tags](#input\_image\_tags) | A map representing the ACR image tags to use for each integration. | `map(string)` | <pre>{<br/>  "dbt_core": "2025.12.08-0",<br/>  "python": "2025.12.08-0"<br/>}</pre> | no |
+| <a name="input_integrations"></a> [integrations](#input\_integrations) | The integrations to deploy. Valid values are 'dbt\_core' and 'python'. | `list(string)` | <pre>[<br/>  "python",<br/>  "dbt_core"<br/>]</pre> | no |
 | <a name="input_name_prefix"></a> [name\_prefix](#input\_name\_prefix) | The name prefix to use for most resources created by this module. | `string` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Name of the resource group to deploy the Azure Container App Job into. | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to apply to all deployed resources ('Application' and 'DeployedBy' are included by default but can be overridden). | `map(string)` | `{}` | no |
