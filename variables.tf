@@ -42,9 +42,9 @@ variable "integrations" {
 variable "image_tags" {
   description = "A map representing the ACR image tags to use for each integration."
   type        = map(string)
-  default = { # TODO - ENG-7994 - Update these once we publish a version that can run on Azure
+  default = {
     python   = "2025.12.08-0",
-    dbt_core = "2025.12.08-0"
+    dbt_core = "2025.12.09-0"
   }
   validation {
     condition     = alltrue([for k in var.integrations : contains(keys(var.image_tags), lower(k))])
