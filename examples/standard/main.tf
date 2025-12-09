@@ -1,9 +1,10 @@
 module "this" {
-  source = "../../"
+  source  = "orchestra-hq/aca-compute/azure"
+  version = "1.0.0"
 
   name_prefix                    = "orchestra-compute"
   resource_group_name            = "hybrid-compute-examples-standard"
-  container_app_environment_name = "private-subnet-environment"
+  container_app_environment_name = "your-private-environment"
 
   federated_credential_subject_id = var.federated_credential_subject_id
   federated_credential_audience   = var.federated_credential_audience
