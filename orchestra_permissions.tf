@@ -1,13 +1,13 @@
 # Maps to the App Registration
 resource "azuread_application" "this" {
-  count = var.enterprise_app_object_id == "" ? 1 : 0
+  count = var.enterprise_app_name == "" ? 1 : 0
 
   display_name = "${var.name_prefix}-app-registration-${local.suffix}"
 }
 
 # Maps to the Enterprise Application
 resource "azuread_service_principal" "this" {
-  count = var.enterprise_app_object_id == "" ? 1 : 0
+  count = var.enterprise_app_name == "" ? 1 : 0
 
   client_id = azuread_application.this[0].client_id
   feature_tags {
@@ -15,8 +15,14 @@ resource "azuread_service_principal" "this" {
   }
 }
 
+data "azuread_service_principal" "this" {
+  count = var.enterprise_app_name == "" ? 0 : 1
+
+  display_name = var.enterprise_app_name
+}
+
 resource "azuread_application_federated_identity_credential" "this" {
-  count = var.enterprise_app_object_id == "" ? 1 : 0
+  count = var.enterprise_app_name == "" ? 1 : 0
 
   application_id = azuread_application.this[0].id
   display_name   = "${var.name_prefix}-federated-credential-${local.suffix}"
