@@ -115,8 +115,8 @@ variable "federated_credential_subject_id" {
   default     = ""
 
   validation {
-    condition     = var.enterprise_app_object_id != "" || var.federated_credential_subject_id != ""
-    error_message = "If the enterprise_app_object_id is not set, the federated_credential_subject_id must be set"
+    condition     = var.app_registration_object_id != "" || var.federated_credential_subject_id != ""
+    error_message = "If the app_registration_object_id is not set, the federated_credential_subject_id must be set"
   }
 }
 
@@ -126,8 +126,8 @@ variable "federated_credential_audience" {
   default     = ""
 
   validation {
-    condition     = var.enterprise_app_object_id != "" || var.federated_credential_audience != ""
-    error_message = "If the enterprise_app_object_id is not set, the federated_credential_audience must be set"
+    condition     = var.app_registration_object_id != "" || var.federated_credential_audience != ""
+    error_message = "If the app_registration_object_id is not set, the federated_credential_audience must be set"
   }
 }
 

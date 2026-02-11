@@ -16,8 +16,8 @@ locals {
   )
 
   federated_credentials_issuer = "https://cognito-identity.amazonaws.com"
-  service_principal_object_id  = var.enterprise_app_object_id == "" ? azuread_service_principal.this[0].object_id : var.enterprise_app_object_id
-  azure_client_id_output_value = var.enterprise_app_object_id == "" ? azuread_application.this[0].client_id : "Set the Client ID of the Enterprise Application that was manually created"
+  service_principal_object_id  = var.app_registration_object_id == "" ? azuread_service_principal.this[0].object_id : var.app_registration_object_id
+  azure_client_id_output_value = var.app_registration_object_id == "" ? azuread_application.this[0].client_id : "Set the Client ID of the Enterprise Application that was manually created"
 }
 
 resource "random_id" "random_suffix" {
