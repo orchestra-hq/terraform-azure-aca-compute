@@ -63,6 +63,10 @@ resource "azurerm_container_app_job" "this" {
   replica_timeout_in_seconds   = var.aca_job_timeout_in_seconds
   tags                         = local.tags
 
+  lifecycle {
+    ignore_changes = [workload_profile_name]
+  }
+
   # Parallelism refers to number of replicas per execution
   # We trigger separate executions per task run, so we set parallelism to 1
   manual_trigger_config {
