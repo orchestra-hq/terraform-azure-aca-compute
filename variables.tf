@@ -115,8 +115,8 @@ variable "federated_credential_subject_id" {
   default     = ""
 
   validation {
-    condition     = var.app_registration_object_id != "" || var.federated_credential_subject_id != ""
-    error_message = "If the app_registration_object_id is not set, the federated_credential_subject_id must be set"
+    condition     = var.enterprise_app_object_id != "" || var.federated_credential_subject_id != ""
+    error_message = "If the enterprise_app_object_id is not set, the federated_credential_subject_id must be set"
   }
 }
 
@@ -126,8 +126,8 @@ variable "federated_credential_audience" {
   default     = ""
 
   validation {
-    condition     = var.app_registration_object_id != "" || var.federated_credential_audience != ""
-    error_message = "If the app_registration_object_id is not set, the federated_credential_audience must be set"
+    condition     = var.enterprise_app_object_id != "" || var.federated_credential_audience != ""
+    error_message = "If the enterprise_app_object_id is not set, the federated_credential_audience must be set"
   }
 }
 
@@ -147,8 +147,8 @@ variable "docker_registry_password" {
   sensitive   = true
 }
 
-variable "app_registration_object_id" {
-  description = "Only set this if you do not have permissions to configure the App Registration and Enterprise App via Terraform. If set, ensure that the Enterprise Application has been set up as documented in https://docs.getorchestra.io/docs/deployment-options/hybrid/aca_jobs."
+variable "enterprise_app_object_id" {
+  description = "Only set this if you do not have permissions to configure the App Registration and Enterprise App via Terraform. If set, ensure that the Enterprise Application and App Registration have been set up as documented in https://docs.getorchestra.io/docs/deployment-options/hybrid/aca_jobs."
   type        = string
   default     = ""
 }
