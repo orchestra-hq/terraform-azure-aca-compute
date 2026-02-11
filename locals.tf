@@ -2,7 +2,9 @@ locals {
   suffix                           = random_id.random_suffix.hex
   federated_credentials_issuer     = "https://cognito-identity.amazonaws.com"
   create_container_app_environment = var.container_app_environment_name == null
+  location                         = local.create_container_app_environment ? data.azurerm_resource_group.this.location : data.azurerm_container_app_environment.this[0].location
   container_app_environment_id     = local.create_container_app_environment ? azurerm_container_app_environment.this[0].id : data.azurerm_container_app_environment.this[0].id
+
   tags = merge(
     {
       Application = "Orchestra Technologies"
