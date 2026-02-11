@@ -147,8 +147,8 @@ variable "docker_registry_password" {
   sensitive   = true
 }
 
-variable "enterprise_app_object_id" {
-  description = "If not set, this module will create an Enterprise Application and App Registration. If set, ensure that the Enterprise Application has been set up as documented in https://docs.getorchestra.io/docs/deployment-options/hybrid/aca_jobs."
+variable "app_registration_object_id" {
+  description = "Only set this if you do not have permissions to configure the App Registration and Enterprise App via Terraform. If set, ensure that the Enterprise Application has been set up as documented in https://docs.getorchestra.io/docs/deployment-options/hybrid/aca_jobs."
   type        = string
   default     = ""
 }
