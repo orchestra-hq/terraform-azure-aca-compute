@@ -1,7 +1,7 @@
 resource "azurerm_storage_account" "this" {
   name                     = "orcstorage${local.suffix}"
   resource_group_name      = data.azurerm_resource_group.this.name
-  location                 = local.container_app_environment.location
+  location                 = local.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
   min_tls_version          = "TLS1_2"
