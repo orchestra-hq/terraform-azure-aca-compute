@@ -1,10 +1,12 @@
 locals {
   suffix                           = random_id.random_suffix.hex
-  federated_credentials_issuer     = "https://cognito-identity.amazonaws.com"
   create_container_app_environment = var.container_app_environment_name == null
   location                         = local.create_container_app_environment ? data.azurerm_resource_group.this.location : data.azurerm_container_app_environment.this[0].location
   container_app_environment_id     = local.create_container_app_environment ? azurerm_container_app_environment.this[0].id : data.azurerm_container_app_environment.this[0].id
-
+  normalized_secret_names = {
+    for key, value in var.container_app_job_secret_env_vars :
+    key => replace(lower(key), "_", "-")
+  }
   tags = merge(
     {
       Application = "Orchestra Technologies"
@@ -13,10 +15,9 @@ locals {
     var.tags,
   )
 
-  normalized_secret_names = {
-    for key, value in var.container_app_job_secret_env_vars :
-    key => replace(lower(key), "_", "-")
-  }
+  federated_credentials_issuer = "https://cognito-identity.amazonaws.com"
+  service_principal_object_id  = var.enterprise_app_name == "" ? azuread_service_principal.this[0].object_id : data.azuread_service_principal.this[0].object_id
+  azure_client_id_output_value = var.enterprise_app_name == "" ? azuread_application.this[0].client_id : "Set this value to your Enterprise Application's client ID"
 }
 
 resource "random_id" "random_suffix" {

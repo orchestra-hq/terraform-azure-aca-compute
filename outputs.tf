@@ -4,7 +4,7 @@ Enter the following values in the Orchestra UI:
 - Compute resource identifier: ${var.name_prefix}-compute-${local.suffix}
 - Resource group name: ${var.resource_group_name}
 - Azure tenant ID: ${data.azurerm_client_config.current.tenant_id}
-- Azure client ID: ${azuread_application.this.client_id}
+- Azure client ID: ${local.azure_client_id_output_value}
 - Azure subscription ID: ${data.azurerm_subscription.current.subscription_id}
 EOT
 }

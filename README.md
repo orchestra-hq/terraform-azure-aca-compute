@@ -52,6 +52,7 @@ No modules.
 | [azurerm_storage_container.credential_management](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_container) | resource |
 | [azurerm_user_assigned_identity.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/user_assigned_identity) | resource |
 | [random_id.random_suffix](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
+| [azuread_service_principal.this](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/data-sources/service_principal) | data source |
 | [azurerm_client_config.current](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config) | data source |
 | [azurerm_container_app_environment.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/container_app_environment) | data source |
 | [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/resource_group) | data source |
@@ -69,8 +70,9 @@ No modules.
 | <a name="input_docker_registry_password"></a> [docker\_registry\_password](#input\_docker\_registry\_password) | Docker registry password. Get this value from Orchestra's team. | `string` | n/a | yes |
 | <a name="input_docker_registry_server"></a> [docker\_registry\_server](#input\_docker\_registry\_server) | The URL of Orchestra's region-specific docker registry. Get this value from Orchestra's team. | `string` | n/a | yes |
 | <a name="input_docker_registry_username"></a> [docker\_registry\_username](#input\_docker\_registry\_username) | Docker registry username. Get this value from Orchestra's team. | `string` | n/a | yes |
-| <a name="input_federated_credential_audience"></a> [federated\_credential\_audience](#input\_federated\_credential\_audience) | Used to configure authentication within your Azure account. Get this value from Orchestra's team. | `string` | n/a | yes |
-| <a name="input_federated_credential_subject_id"></a> [federated\_credential\_subject\_id](#input\_federated\_credential\_subject\_id) | Used to configure authentication within your Azure account. Get this value from Orchestra's team. | `string` | n/a | yes |
+| <a name="input_enterprise_app_name"></a> [enterprise\_app\_name](#input\_enterprise\_app\_name) | Only set this if you do not have permissions to configure the App Registration and Enterprise App via Terraform. If set, ensure that the Enterprise Application and App Registration have been set up as documented in https://docs.getorchestra.io/docs/deployment-options/hybrid/aca_jobs. | `string` | `""` | no |
+| <a name="input_federated_credential_audience"></a> [federated\_credential\_audience](#input\_federated\_credential\_audience) | Used to configure authentication within your Azure account. Get this value from Orchestra's team. | `string` | `""` | no |
+| <a name="input_federated_credential_subject_id"></a> [federated\_credential\_subject\_id](#input\_federated\_credential\_subject\_id) | Used to configure authentication within your Azure account. Get this value from Orchestra's team. | `string` | `""` | no |
 | <a name="input_image_tags"></a> [image\_tags](#input\_image\_tags) | A map representing the ACR image tags to use for each integration. | `map(string)` | <pre>{<br/>  "dbt_core": "2025.12.09-0",<br/>  "python": "2025.12.08-0"<br/>}</pre> | no |
 | <a name="input_integrations"></a> [integrations](#input\_integrations) | The integrations to deploy. Valid values are 'dbt\_core' and 'python'. | `list(string)` | <pre>[<br/>  "python",<br/>  "dbt_core"<br/>]</pre> | no |
 | <a name="input_name_prefix"></a> [name\_prefix](#input\_name\_prefix) | The name prefix to use for most resources created by this module. | `string` | n/a | yes |

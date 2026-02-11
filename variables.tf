@@ -112,11 +112,23 @@ variable "tags" {
 variable "federated_credential_subject_id" {
   description = "Used to configure authentication within your Azure account. Get this value from Orchestra's team."
   type        = string
+  default     = ""
+
+  validation {
+    condition     = var.enterprise_app_name != "" || var.federated_credential_subject_id != ""
+    error_message = "If the enterprise_app_name is not set, the federated_credential_subject_id must be set"
+  }
 }
 
 variable "federated_credential_audience" {
   description = "Used to configure authentication within your Azure account. Get this value from Orchestra's team."
   type        = string
+  default     = ""
+
+  validation {
+    condition     = var.enterprise_app_name != "" || var.federated_credential_audience != ""
+    error_message = "If the enterprise_app_name is not set, the federated_credential_audience must be set"
+  }
 }
 
 variable "docker_registry_server" {
@@ -133,4 +145,10 @@ variable "docker_registry_password" {
   description = "Docker registry password. Get this value from Orchestra's team."
   type        = string
   sensitive   = true
+}
+
+variable "enterprise_app_name" {
+  description = "Only set this if you do not have permissions to configure the App Registration and Enterprise App via Terraform. If set, ensure that the Enterprise Application and App Registration have been set up as documented in https://docs.getorchestra.io/docs/deployment-options/hybrid/aca_jobs."
+  type        = string
+  default     = ""
 }
