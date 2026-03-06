@@ -44,7 +44,7 @@ variable "image_tags" {
   type        = map(string)
   default = {
     python   = "2026.03.06-0",
-    dbt_core = "2026.03.06-0"
+    dbt_core = "2026.03.05-0"
   }
   validation {
     condition     = alltrue([for k in var.integrations : contains(keys(var.image_tags), lower(k))])
