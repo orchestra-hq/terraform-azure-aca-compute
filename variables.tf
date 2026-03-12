@@ -43,7 +43,7 @@ variable "image_tags" {
   description = "A map representing the ACR image tags to use for each integration."
   type        = map(string)
   default = {
-    python   = "2026.03.06-0",
+    python   = "2026.03.12-1",
     dbt_core = "2026.03.05-0"
   }
   validation {
