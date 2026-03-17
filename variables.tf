@@ -43,8 +43,8 @@ variable "image_tags" {
   description = "A map representing the ACR image tags to use for each integration."
   type        = map(string)
   default = {
-    python   = "2026.03.12-1",
-    dbt_core = "2026.03.05-0"
+    python   = "2026.03.17-0",
+    dbt_core = "2026.03.17-0"
   }
   validation {
     condition     = alltrue([for k in var.integrations : contains(keys(var.image_tags), lower(k))])
