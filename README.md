@@ -1,6 +1,6 @@
 # terraform-azure-aca-compute
 
-Deploy an Azure Container App Job (with relevant resources) for a hybrid compute option with Orchestra. See [Orchestra docs](https://docs.getorchestra.io/docs/deployment-options/hybrid/aca_jobs) for more details.
+Deploy an Azure Container App Job (with relevant resources) for a hybrid compute resource in Orchestra. See [Orchestra docs](https://docs.getorchestra.io/docs/deployment-options/hybrid/aca_jobs) for more details.
 
 ## Contributing
 
