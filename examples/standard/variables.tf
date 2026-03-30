@@ -1,9 +1,4 @@
-variable "federated_credential_subject_id" {
-  type      = string
-  sensitive = true
-}
-
-variable "federated_credential_audience" {
+variable "orchestra_api_key" {
   type      = string
   sensitive = true
 }
