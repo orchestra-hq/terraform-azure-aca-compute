@@ -1,26 +1,10 @@
-variable "federated_credential_subject_id" {
+variable "orchestra_api_key" {
   type      = string
   sensitive = true
 }
 
-variable "federated_credential_audience" {
-  type      = string
-  sensitive = true
-}
-
-variable "docker_registry_server" {
-  type      = string
-  sensitive = true
-}
-
-variable "docker_registry_username" {
-  type      = string
-  sensitive = true
-}
-
-variable "docker_registry_password" {
-  type      = string
-  sensitive = true
+variable "orchestra_credentials_api_endpoint" {
+  type = string
 }
 
 variable "tenant_id" {

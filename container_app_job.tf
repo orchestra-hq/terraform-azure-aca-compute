@@ -75,14 +75,14 @@ resource "azurerm_container_app_job" "this" {
   }
 
   registry {
-    server               = var.docker_registry_server
-    username             = var.docker_registry_username
+    server               = local.docker_registry_server
+    username             = local.docker_registry_username
     password_secret_name = "registry-password"
   }
 
   secret {
     name  = "registry-password"
-    value = var.docker_registry_password
+    value = local.docker_registry_password
   }
 
   dynamic "secret" {
@@ -100,7 +100,7 @@ resource "azurerm_container_app_job" "this" {
 
   template {
     container {
-      image  = "${var.docker_registry_server}/${replace(each.value.integration, "_", "-")}:${each.value.python_version}_${upper(each.value.package_manager)}-${var.image_tags[each.value.integration]}"
+      image  = "${local.docker_registry_server}/${replace(each.value.integration, "_", "-")}:${each.value.python_version}_${upper(each.value.package_manager)}-${var.image_tags[each.value.integration]}"
       name   = "compute-runner"
       cpu    = var.compute_resources[each.value.integration].cpu
       memory = var.compute_resources[each.value.integration].memory

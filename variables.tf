@@ -109,42 +109,25 @@ variable "tags" {
   default     = {}
 }
 
-variable "federated_credential_subject_id" {
-  description = "Used to configure authentication within your Azure account. Get this value from Orchestra's team."
+variable "orchestra_credentials_api_endpoint" {
+  description = "Orchestra API endpoint that returns credentials for Azure hybrid compute setup."
   type        = string
-  default     = ""
 
   validation {
-    condition     = var.enterprise_app_name != "" || var.federated_credential_subject_id != ""
-    error_message = "If the enterprise_app_name is not set, the federated_credential_subject_id must be set"
+    condition     = can(regex("^https://", var.orchestra_credentials_api_endpoint))
+    error_message = "The orchestra_credentials_api_endpoint must be a valid HTTPS URL."
   }
 }
 
-variable "federated_credential_audience" {
-  description = "Used to configure authentication within your Azure account. Get this value from Orchestra's team."
-  type        = string
-  default     = ""
-
-  validation {
-    condition     = var.enterprise_app_name != "" || var.federated_credential_audience != ""
-    error_message = "If the enterprise_app_name is not set, the federated_credential_audience must be set"
-  }
-}
-
-variable "docker_registry_server" {
-  description = "The URL of Orchestra's region-specific docker registry. Get this value from Orchestra's team."
-  type        = string
-}
-
-variable "docker_registry_username" {
-  description = "Docker registry username. Get this value from Orchestra's team."
-  type        = string
-}
-
-variable "docker_registry_password" {
-  description = "Docker registry password. Get this value from Orchestra's team."
+variable "orchestra_api_key" {
+  description = "Orchestra API key used to authenticate when fetching Azure hybrid compute credentials."
   type        = string
   sensitive   = true
+
+  validation {
+    condition     = trimspace(var.orchestra_api_key) != ""
+    error_message = "The orchestra_api_key must not be empty."
+  }
 }
 
 variable "enterprise_app_name" {

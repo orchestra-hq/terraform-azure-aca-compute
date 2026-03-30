@@ -8,6 +8,10 @@ terraform {
       source  = "hashicorp/azuread"
       version = "~> 3.0"
     }
+    http = {
+      source  = "hashicorp/http"
+      version = "~> 3.5"
+    }
   }
 
   required_version = ">= 1.12.1"

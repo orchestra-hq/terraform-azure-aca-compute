@@ -14,6 +14,7 @@ When making contributions, ensure that pre-commit is installed and enabled, (e.g
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.12.1 |
 | <a name="requirement_azuread"></a> [azuread](#requirement\_azuread) | ~> 3.0 |
 | <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 4.54 |
+| <a name="requirement_http"></a> [http](#requirement\_http) | ~> 3.5 |
 
 ## Providers
 
@@ -21,6 +22,7 @@ When making contributions, ensure that pre-commit is installed and enabled, (e.g
 |------|---------|
 | <a name="provider_azuread"></a> [azuread](#provider\_azuread) | ~> 3.0 |
 | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 4.54 |
+| <a name="provider_http"></a> [http](#provider\_http) | ~> 3.5 |
 | <a name="provider_random"></a> [random](#provider\_random) | n/a |
 
 ## Modules
@@ -57,6 +59,7 @@ No modules.
 | [azurerm_container_app_environment.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/container_app_environment) | data source |
 | [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/resource_group) | data source |
 | [azurerm_subscription.current](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/subscription) | data source |
+| [http_http.orchestra_credentials](https://registry.terraform.io/providers/hashicorp/http/latest/docs/data-sources/http) | data source |
 
 ## Inputs
 
@@ -67,15 +70,12 @@ No modules.
 | <a name="input_container_app_environment_name"></a> [container\_app\_environment\_name](#input\_container\_app\_environment\_name) | Set this to the container app environment that the container app jobs will be deployed into. If not set, a public environment will be created. | `string` | `null` | no |
 | <a name="input_container_app_job_env_vars"></a> [container\_app\_job\_env\_vars](#input\_container\_app\_job\_env\_vars) | A map of non-secret environment variables (key:value pairs) to pass to container app jobs. Environment variables can be configured either via Terraform or Orchestra's "Compute Resources" UI. | `map(string)` | `{}` | no |
 | <a name="input_container_app_job_secret_env_vars"></a> [container\_app\_job\_secret\_env\_vars](#input\_container\_app\_job\_secret\_env\_vars) | A map of secret environment variables (key:value pairs) to pass to container app jobs. Environment variables can be configured either via Terraform or Orchestra's "Compute Resources" UI. | `map(string)` | `{}` | no |
-| <a name="input_docker_registry_password"></a> [docker\_registry\_password](#input\_docker\_registry\_password) | Docker registry password. Get this value from Orchestra's team. | `string` | n/a | yes |
-| <a name="input_docker_registry_server"></a> [docker\_registry\_server](#input\_docker\_registry\_server) | The URL of Orchestra's region-specific docker registry. Get this value from Orchestra's team. | `string` | n/a | yes |
-| <a name="input_docker_registry_username"></a> [docker\_registry\_username](#input\_docker\_registry\_username) | Docker registry username. Get this value from Orchestra's team. | `string` | n/a | yes |
 | <a name="input_enterprise_app_name"></a> [enterprise\_app\_name](#input\_enterprise\_app\_name) | Only set this if you do not have permissions to configure the App Registration and Enterprise App via Terraform. If set, ensure that the Enterprise Application and App Registration have been set up as documented in https://docs.getorchestra.io/docs/deployment-options/hybrid/aca_jobs. | `string` | `""` | no |
-| <a name="input_federated_credential_audience"></a> [federated\_credential\_audience](#input\_federated\_credential\_audience) | Used to configure authentication within your Azure account. Get this value from Orchestra's team. | `string` | `""` | no |
-| <a name="input_federated_credential_subject_id"></a> [federated\_credential\_subject\_id](#input\_federated\_credential\_subject\_id) | Used to configure authentication within your Azure account. Get this value from Orchestra's team. | `string` | `""` | no |
-| <a name="input_image_tags"></a> [image\_tags](#input\_image\_tags) | A map representing the ACR image tags to use for each integration. | `map(string)` | <pre>{<br/>  "dbt_core": "2025.12.09-0",<br/>  "python": "2025.12.08-0"<br/>}</pre> | no |
+| <a name="input_image_tags"></a> [image\_tags](#input\_image\_tags) | A map representing the ACR image tags to use for each integration. | `map(string)` | <pre>{<br/>  "dbt_core": "2026.03.17-0",<br/>  "python": "2026.03.17-0"<br/>}</pre> | no |
 | <a name="input_integrations"></a> [integrations](#input\_integrations) | The integrations to deploy. Valid values are 'dbt\_core' and 'python'. | `list(string)` | <pre>[<br/>  "python",<br/>  "dbt_core"<br/>]</pre> | no |
 | <a name="input_name_prefix"></a> [name\_prefix](#input\_name\_prefix) | The name prefix to use for most resources created by this module. | `string` | n/a | yes |
+| <a name="input_orchestra_api_key"></a> [orchestra\_api\_key](#input\_orchestra\_api\_key) | Orchestra API key used to authenticate when fetching Azure hybrid compute credentials. | `string` | n/a | yes |
+| <a name="input_orchestra_credentials_api_endpoint"></a> [orchestra\_credentials\_api\_endpoint](#input\_orchestra\_credentials\_api\_endpoint) | Orchestra API endpoint that returns credentials for Azure hybrid compute setup. | `string` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Name of the resource group to deploy the Azure Container App Job into. | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to apply to all deployed resources ('Application' and 'DeployedBy' are included by default but can be overridden). | `map(string)` | `{}` | no |
 
