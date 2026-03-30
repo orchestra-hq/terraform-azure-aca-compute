@@ -29,8 +29,8 @@ resource "azuread_application_federated_identity_credential" "this" {
   description    = "Federated credentials used to grant Orchestra access to this account's Azure resources for hybrid compute"
 
   issuer    = local.federated_credentials_issuer
-  audiences = [var.federated_credential_audience]
-  subject   = var.federated_credential_subject_id
+  audiences = [local.federated_credentials.audience]
+  subject   = local.federated_credentials.subject_id
 }
 
 resource "azurerm_role_assignment" "container_app_job_resource_group" {

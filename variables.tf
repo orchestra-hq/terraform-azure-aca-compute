@@ -109,25 +109,21 @@ variable "tags" {
   default     = {}
 }
 
-variable "federated_credential_subject_id" {
-  description = "Used to configure authentication within your Azure account. Get this value from Orchestra's team."
+variable "orchestra_api_base_url" {
+  description = "Base URL for the Orchestra API (used to fetch Azure federated credential values at plan/apply time). Only overwrite if using a non-production Orchestra environment."
   type        = string
-  default     = ""
-
-  validation {
-    condition     = var.enterprise_app_name != "" || var.federated_credential_subject_id != ""
-    error_message = "If the enterprise_app_name is not set, the federated_credential_subject_id must be set"
-  }
+  default     = "https://app.getorchestra.io"
 }
 
-variable "federated_credential_audience" {
-  description = "Used to configure authentication within your Azure account. Get this value from Orchestra's team."
+variable "orchestra_api_key" {
+  description = "Orchestra API key used to fetch federated credentials. Only required if the Terraform module is managing the Enterprise App. Set via the orchestra_api_key variable or TF_VAR_orchestra_api_key."
   type        = string
   default     = ""
+  sensitive   = true
 
   validation {
-    condition     = var.enterprise_app_name != "" || var.federated_credential_audience != ""
-    error_message = "If the enterprise_app_name is not set, the federated_credential_audience must be set"
+    condition     = var.enterprise_app_name != "" || var.orchestra_api_key != ""
+    error_message = "If enterprise_app_name is not set, orchestra_api_key must be set."
   }
 }
 
