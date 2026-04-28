@@ -30,7 +30,7 @@ resource "azuread_application_federated_identity_credential" "this" {
 
   issuer    = local.federated_credentials_issuer
   audiences = [local.federated_credentials.audience]
-  subject   = local.federated_credentials.subject_id
+  subject   = local.federated_credentials.subjectId
 }
 
 resource "azurerm_role_assignment" "container_app_job_resource_group" {
