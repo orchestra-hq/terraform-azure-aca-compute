@@ -29,13 +29,13 @@ variable "container_app_environment_name" {
 }
 
 variable "integrations" {
-  description = "The integrations to deploy. Valid values are 'dbt_core' and 'python'."
+  description = "The integrations to deploy. Valid values are 'bash', 'dbt_core' and 'python'."
   type        = list(string)
   default     = ["python", "dbt_core"]
 
   validation {
-    condition     = alltrue([for integration in var.integrations : contains(["dbt_core", "python"], integration)])
-    error_message = "The integrations must be one of 'dbt_core' or 'python'."
+    condition     = alltrue([for integration in var.integrations : contains(["bash", "dbt_core", "python"], integration)])
+    error_message = "The integrations must be one of 'bash', 'dbt_core' or 'python'."
   }
 }
 
@@ -44,7 +44,8 @@ variable "image_tags" {
   type        = map(string)
   default = {
     python   = "2026.04.21-1",
-    dbt_core = "2026.04.27-0"
+    dbt_core = "2026.04.27-0",
+    bash     = "2026.04.27-0"
   }
   validation {
     condition     = alltrue([for k in var.integrations : contains(keys(var.image_tags), lower(k))])
@@ -61,6 +62,7 @@ variable "compute_resources" {
   default = {
     python   = { cpu = "0.5", memory = "1Gi" }
     dbt_core = { cpu = "0.5", memory = "1Gi" }
+    bash     = { cpu = "0.5", memory = "1Gi" }
   }
   validation {
     condition     = alltrue([for k in var.integrations : contains(keys(var.compute_resources), lower(k))])

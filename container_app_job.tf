@@ -1,20 +1,36 @@
 locals {
-  integrations     = [for k in var.integrations : lower(k)]
-  python_versions  = ["3_12", "3_11"]
-  package_managers = ["PIP", "POETRY", "UV"]
-  task_defs = flatten([
-    for integration in local.integrations : [
+  integrations = [for k in var.integrations : lower(k)]
+
+  # Python-based integrations get one job per Python version and package manager.
+  # Integrations that ship a single image (e.g. bash) get one job, keyed "default".
+  matrix_integrations         = [for integration in local.integrations : integration if !contains(local.single_variant_integrations, integration)]
+  single_variant_integrations = ["bash"]
+  python_versions             = ["3_12", "3_11"]
+  package_managers            = ["PIP", "POETRY", "UV"]
+
+  matrix_task_defs = flatten([
+    for integration in local.matrix_integrations : [
       for python_version in local.python_versions : [
         for package_manager in local.package_managers : {
-          integration     = integration
-          python_version  = python_version
-          package_manager = package_manager
-          cpu             = var.compute_resources[integration].cpu
-          memory          = var.compute_resources[integration].memory
+          key            = "${replace(integration, "_", "-")}-${replace(python_version, "_", "-")}-${lower(package_manager)}"
+          integration    = integration
+          image_variant  = "${python_version}_${upper(package_manager)}"
+          container_name = "compute-runner"
         }
       ]
     ]
   ])
+
+  single_variant_task_defs = [
+    for integration in local.integrations : {
+      key            = "${replace(integration, "_", "-")}-default"
+      integration    = integration
+      image_variant  = "default"
+      container_name = integration
+    } if contains(local.single_variant_integrations, integration)
+  ]
+
+  task_defs = { for task in concat(local.matrix_task_defs, local.single_variant_task_defs) : task.key => task }
 }
 
 data "azurerm_container_app_environment" "this" {
@@ -46,7 +62,7 @@ resource "azurerm_container_app_environment" "this" {
 }
 
 resource "azurerm_user_assigned_identity" "this" {
-  for_each = { for task in local.task_defs : "${replace(task.integration, "_", "-")}-${replace(task.python_version, "_", "-")}-${lower(task.package_manager)}" => task }
+  for_each = local.task_defs
 
   name                = "orc-mi-${each.key}-${local.suffix}"
   resource_group_name = data.azurerm_resource_group.this.name
@@ -54,7 +70,7 @@ resource "azurerm_user_assigned_identity" "this" {
 }
 
 resource "azurerm_container_app_job" "this" {
-  for_each = { for task in local.task_defs : "${replace(task.integration, "_", "-")}-${replace(task.python_version, "_", "-")}-${lower(task.package_manager)}" => task }
+  for_each = local.task_defs
 
   name                         = "orc-${each.key}-${local.suffix}"
   resource_group_name          = data.azurerm_resource_group.this.name
@@ -100,8 +116,8 @@ resource "azurerm_container_app_job" "this" {
 
   template {
     container {
-      image  = "${var.docker_registry_server}/${replace(each.value.integration, "_", "-")}:${each.value.python_version}_${upper(each.value.package_manager)}-${var.image_tags[each.value.integration]}"
-      name   = "compute-runner"
+      image  = "${var.docker_registry_server}/${replace(each.value.integration, "_", "-")}:${each.value.image_variant}-${var.image_tags[each.value.integration]}"
+      name   = each.value.container_name
       cpu    = var.compute_resources[each.value.integration].cpu
       memory = var.compute_resources[each.value.integration].memory
 
@@ -130,7 +146,7 @@ resource "azurerm_container_app_job" "this" {
 }
 
 resource "azurerm_role_assignment" "container_app_job_secrets_storage" {
-  for_each = { for task in local.task_defs : "${replace(task.integration, "_", "-")}-${replace(task.python_version, "_", "-")}-${lower(task.package_manager)}" => task }
+  for_each = local.task_defs
 
   scope                = azurerm_storage_container.credential_management.id
   role_definition_name = "Storage Blob Data Contributor"
@@ -138,7 +154,7 @@ resource "azurerm_role_assignment" "container_app_job_secrets_storage" {
 }
 
 resource "azurerm_role_assignment" "container_app_job_artifacts_storage" {
-  for_each = { for task in local.task_defs : "${replace(task.integration, "_", "-")}-${replace(task.python_version, "_", "-")}-${lower(task.package_manager)}" => task }
+  for_each = local.task_defs
 
   scope                = azurerm_storage_container.artifacts.id
   role_definition_name = "Storage Blob Data Contributor"
@@ -146,7 +162,7 @@ resource "azurerm_role_assignment" "container_app_job_artifacts_storage" {
 }
 
 resource "azurerm_role_assignment" "container_app_job_key_vault_decrypt" {
-  for_each = { for task in local.task_defs : "${replace(task.integration, "_", "-")}-${replace(task.python_version, "_", "-")}-${lower(task.package_manager)}" => task }
+  for_each = local.task_defs
 
   scope                = azurerm_key_vault.this.id
   role_definition_name = "Key Vault Crypto User"
