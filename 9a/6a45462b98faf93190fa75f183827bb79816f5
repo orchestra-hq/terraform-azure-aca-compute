@@ -1,0 +1,19 @@
+.github/workflows/notify_release.yml
+  s_878d65d9846dfd::t_5679c662cb2ed4 8-9,13,26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "9a6a45462b98faf93190fa75f183827bb79816f5",
+  "prompts": {},
+  "sessions": {
+    "s_878d65d9846dfd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2512a680-e150-4db0-80c4-08ed8e462eab",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jeroen Rijks <jeroen@getorchestra.io>"
+    }
+  }
+}
