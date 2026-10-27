@@ -1,0 +1,19 @@
+container_app_job.tf
+  s_d7cca70aad5835::t_a8ec25461b6d5b 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ed2975684710ff73ea221a7d1257b693adad9936",
+  "prompts": {},
+  "sessions": {
+    "s_d7cca70aad5835": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "s_d7cca70aad5835",
+        "model": "unknown"
+      },
+      "human_author": "Will Davies <42768478+willdavies0@users.noreply.github.com>"
+    }
+  }
+}
