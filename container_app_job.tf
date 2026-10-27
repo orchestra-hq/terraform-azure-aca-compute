@@ -1,6 +1,6 @@
 locals {
   integrations     = [for k in var.integrations : lower(k)]
-  python_versions  = ["3_12", "3_11"]
+  python_versions  = ["3_14", "3_13", "3_12", "3_11"]
   package_managers = ["PIP", "POETRY", "UV"]
   task_defs = flatten([
     for integration in local.integrations : [
